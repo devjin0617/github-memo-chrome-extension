@@ -5,6 +5,8 @@
     "description": "simple memo to repository of github",
     "version": "1.0",
 
+    "content_security_policy": "script-src 'self'  https://*.gsstatic.com; object-src 'self'",
+
     "content_scripts": [
         {
             "matches": ["https://github.com/stars"],
