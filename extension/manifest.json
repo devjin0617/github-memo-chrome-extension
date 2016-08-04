@@ -1,0 +1,22 @@
+{
+    "manifest_version": 2,
+    
+    "name": "github_memo",
+    "description": "simple memo to repository of github",
+    "version": "1.0",
+
+    "content_scripts": [
+        {
+            "matches": ["https://github.com/stars"],
+            "js" : [
+                "/js/jquery.js",
+                "/js/github.memo.js"
+            ]
+        }
+    ],
+
+    "permissions": [
+        "tabs",
+        "<all_urls>"
+    ]
+}
