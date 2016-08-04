@@ -11,6 +11,8 @@
         {
             "matches": ["https://github.com/stars"],
             "js" : [
+                "/js/md5.js",
+                "/js/firebase.js",
                 "/js/jquery.js",
                 "/js/github.memo.js"
             ]

@@ -1,11 +1,11 @@
-var script   = document.createElement("script");
-script.type  = "text/javascript";
-script.src   = "https://www.gstatic.com/firebasejs/3.2.1/firebase.js";
-document.body.appendChild(script);
+//var script   = document.createElement("script");
+//script.type  = "text/javascript";
+//script.src   = "https://www.gstatic.com/firebasejs/3.2.1/firebase.js";
+//document.body.appendChild(script);
 
-var jinOpt = {
+var jinUtils = {
     form : {
-        input : '<input type="text" class="form-control" placeholder="write input to project memo" style="width:655px;">',
+        input : '<input type="text" class="form-control" placeholder="write input to project memo" value="{value}" style="width:655px;">',
         button : '<button class="btn btn-default" style="width:74px;">save</button>'
     },
     firebase : {
@@ -15,24 +15,66 @@ var jinOpt = {
             databaseURL: "https://github-memo.firebaseio.com",
             storageBucket: ""
         },
-        load : function() {
-            if(!window.firebase) {
-                setTimeout(jinOpt.firebase.load, 200);
-            } else {
-                console.log('next');
-                console.log(window['firebase']);
-                next();
-            }
+        setMemo : function(key, memo) {
+
+            database.ref('/' + sUserId + '/' + key).set(memo);
+        },
+        getMemoList : function(cb) {
+            database.ref('/' + sUserId).on('value', function(data) {
+
+                jinUtils.data.list = data.val();
+
+                if(cb) {
+                    cb();
+                }
+            });
+        },
+        getMemo : function(key, cb) {
+            database.ref('/' + sUserId + '/' + key).once('value').then(function(data) {
+                jinUtils.data.list[key] = data.val();
+
+                if(cb) {
+                    cb();
+                }
+            });
         }
+    },
+    data : {
+        list : {}
     }
 };
 
-var next = function() {
-    firebase.initializeApp(jinOpt.firebase.config);
-    var database = firebase.database();
+firebase.initializeApp(jinUtils.firebase.config);
+var database = firebase.database();
 
-    $('.repo-list-item').append(jinOpt.form.input + jinOpt.form.button);
-};
+var userId = $('.css-truncate-target').text();
+var sUserId = MD5($('.css-truncate-target').text());
 
-jinOpt.firebase.load();
+database.ref('/' + sUserId + '/id').set(userId);
+
+jinUtils.firebase.getMemoList(function() {
+
+    $('.repo-list-item').each(function(index) {
+
+        var hash = MD5($(this).find('form').eq(0).attr('action'));
+
+        var form = '<div id="{id}" class="github-memo-wrap">' + jinUtils.form.input + jinUtils.form.button + '</div>';
+
+        $(this).find('.github-memo-wrap').empty();
+        $(this).append(form.replace('{id}', hash).replace('{value}', jinUtils.data.list[hash] || ''));
+    });
+
+    $('.github-memo-wrap button').unbind();
+    $('.github-memo-wrap button').click(function(e) {
+
+        var $root = $(this).closest('.github-memo-wrap');
+        var hashKey = $root.attr('id');
+        var value = $root.find('input').eq(0).val();
+        jinUtils.firebase.setMemo(hashKey, value);
+    });
+
+
+
+});
+
 
