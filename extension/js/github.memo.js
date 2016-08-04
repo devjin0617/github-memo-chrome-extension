@@ -20,7 +20,12 @@ var jinUtils = {
             database.ref('/' + sUserId + '/' + key).set(memo);
         },
         getMemoList : function(cb) {
+
+            jinUtils.progress.show();
+
             database.ref('/' + sUserId).on('value', function(data) {
+
+                jinUtils.progress.hide();
 
                 jinUtils.data.list = data.val();
 
@@ -41,8 +46,23 @@ var jinUtils = {
     },
     data : {
         list : {}
+    },
+    progress : {
+        init : function() {
+            var form = '<div id="github-memo-progress" style="margin:10px; position: fixed; left:0; top:0;">github memo loading...</div>';
+            $('body').append(form);
+            $('#github-memo-progress').hide();
+        },
+        show : function() {
+            $('#github-memo-progress').show();
+        },
+        hide : function() {
+            $('#github-memo-progress').hide();
+        }
     }
 };
+jinUtils.progress.init();
+jinUtils.progress.show();
 
 firebase.initializeApp(jinUtils.firebase.config);
 var database = firebase.database();
