@@ -72,7 +72,52 @@ var sUserId = MD5($('.css-truncate-target').text());
 
 database.ref('/' + sUserId + '/id').set(userId);
 
-jinUtils.firebase.getMemoList(function() {
+(
+        function( $ ){
+
+            var strLocation = window.location.href;
+            var strHash = window.location.hash;
+            var strPrevLocation = "";
+            var strPrevHash = "";
+
+            var intIntervalTime = 100;
+
+            var fnCleanHash = function( strHash ){
+                return(
+                    strHash.substring( 1, strHash.length )
+                    );
+            }
+
+            var fnCheckLocation = function(){
+
+                if (strLocation != window.location.href){
+
+                    strPrevLocation = strLocation;
+                    strPrevHash = strHash;
+                    strLocation = window.location.href;
+                    strHash = window.location.hash;
+                    
+                    init();
+
+                    $( window.location ).trigger(
+                        "change",
+                        {
+                            currentHref: strLocation,
+                            currentHash: fnCleanHash( strHash ),
+                            previousHref: strPrevLocation,
+                            previousHash: fnCleanHash( strPrevHash )
+                        }
+                        );
+                }
+            }
+            // Set an interval to check the location changes.
+            setInterval( fnCheckLocation, intIntervalTime );
+        }
+    )( jQuery );
+
+var init = function() {
+    
+    jinUtils.firebase.getMemoList(function() {
 
     $('.repo-list-item').each(function(index) {
 
@@ -93,8 +138,10 @@ jinUtils.firebase.getMemoList(function() {
         jinUtils.firebase.setMemo(hashKey, value);
     });
 
-
-
 });
+init();
+    
+};
+
 
 
