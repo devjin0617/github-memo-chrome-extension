@@ -1,14 +1,14 @@
 {
     "manifest_version": 2,
     
-    "name": "github_memo",
+    "name": "GitHub Memo",
     "description": "simple memo to repository of github",
-    "version": "1.1",
+    "version": "1.2",
 
     "icons": {
-        "16": "icon16.png",
-        "48": "icon48.png",
-        "128": "icon128.png"
+        "16": "/icon/icon16.png",
+        "48": "/icon/icon48.png",
+        "128": "/icon/icon128.png"
     },
 
     "content_security_policy": "script-src 'self'  https://*.gsstatic.com; object-src 'self'",
