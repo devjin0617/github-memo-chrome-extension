@@ -1,8 +1,6 @@
 # github-memo-chrome-extension
 
-[![Join the chat at https://gitter.im/devjin0617/github-memo-chrome-extension](https://badges.gitter.im/devjin0617/github-memo-chrome-extension.svg)](https://gitter.im/devjin0617/github-memo-chrome-extension?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
-[![extension Version][extension-image]][extension-url] [![firebase Version][firebase-image]][firebase-url]
+[![extension Version][extension-image]][extension-url] [![firebase Version][firebase-image]][firebase-url] [![Join the chat at https://gitter.im/devjin0617/github-memo-chrome-extension](https://badges.gitter.im/devjin0617/github-memo-chrome-extension.svg)](https://gitter.im/devjin0617/github-memo-chrome-extension?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 this is chrome extension to github repository memo
 
