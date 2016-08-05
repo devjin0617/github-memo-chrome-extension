@@ -10,7 +10,7 @@ var jinUtils = {
     },
     firebase : {
         config : {
-            apiKey: "AIzaSyAD8HsgJcEut_ASE6hFC0vP-a4k8K6xMnI",
+            apiKey: "{input your apikey of firebase}",
             authDomain: "github-memo.firebaseapp.com",
             databaseURL: "https://github-memo.firebaseio.com",
             storageBucket: ""
