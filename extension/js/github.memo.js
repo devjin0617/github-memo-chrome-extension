@@ -20,7 +20,6 @@ var jinUtils = {
             database.ref('/' + sUserId + '/' + key).set(memo);
         },
         getMemoList : function(cb) {
-
             jinUtils.progress.show();
 
             database.ref('/' + sUserId).on('value', function(data) {
@@ -72,76 +71,83 @@ var sUserId = MD5($('.css-truncate-target').text());
 
 database.ref('/' + sUserId + '/id').set(userId);
 
+var init = function() {
+
+    if($('.pjax-loader-bar').hasClass('is-loading')) {
+
+        setTimeout(init, 200);
+        return;
+
+    }
+
+    jinUtils.firebase.getMemoList(function () {
+
+        $('.repo-list-item').each(function (index) {
+
+            var hash = MD5($(this).find('form').eq(0).attr('action'));
+
+            var form = '<div id="{id}" class="github-memo-wrap">' + jinUtils.form.input + jinUtils.form.button + '</div>';
+
+            $(this).find('.github-memo-wrap').empty();
+            $(this).append(form.replace('{id}', hash).replace('{value}', jinUtils.data.list[hash] || ''));
+        });
+
+        $('.github-memo-wrap button').unbind();
+        $('.github-memo-wrap button').click(function (e) {
+
+            var $root = $(this).closest('.github-memo-wrap');
+            var hashKey = $root.attr('id');
+            var value = $root.find('input').eq(0).val();
+            jinUtils.firebase.setMemo(hashKey, value);
+        });
+
+    });
+};
+
 (
-        function( $ ){
+    function( $ ){
 
-            var strLocation = window.location.href;
-            var strHash = window.location.hash;
-            var strPrevLocation = "";
-            var strPrevHash = "";
+        var strLocation = window.location.href;
+        var strHash = window.location.hash;
+        var strPrevLocation = "";
+        var strPrevHash = "";
 
-            var intIntervalTime = 100;
+        var intIntervalTime = 100;
 
-            var fnCleanHash = function( strHash ){
-                return(
-                    strHash.substring( 1, strHash.length )
+        var fnCleanHash = function( strHash ){
+            return(
+                strHash.substring( 1, strHash.length )
+                );
+        };
+
+        var fnCheckLocation = function(){
+
+            if (strLocation != window.location.href){
+
+                strPrevLocation = strLocation;
+                strPrevHash = strHash;
+                strLocation = window.location.href;
+                strHash = window.location.hash;
+
+                init();
+
+                $( window.location ).trigger(
+                    "change",
+                    {
+                        currentHref: strLocation,
+                        currentHash: fnCleanHash( strHash ),
+                        previousHref: strPrevLocation,
+                        previousHash: fnCleanHash( strPrevHash )
+                    }
                     );
             }
+        };
+        // Set an interval to check the location changes.
+        setInterval( fnCheckLocation, intIntervalTime );
+    }
+)( jQuery );
 
-            var fnCheckLocation = function(){
-
-                if (strLocation != window.location.href){
-
-                    strPrevLocation = strLocation;
-                    strPrevHash = strHash;
-                    strLocation = window.location.href;
-                    strHash = window.location.hash;
-                    
-                    init();
-
-                    $( window.location ).trigger(
-                        "change",
-                        {
-                            currentHref: strLocation,
-                            currentHash: fnCleanHash( strHash ),
-                            previousHref: strPrevLocation,
-                            previousHash: fnCleanHash( strPrevHash )
-                        }
-                        );
-                }
-            }
-            // Set an interval to check the location changes.
-            setInterval( fnCheckLocation, intIntervalTime );
-        }
-    )( jQuery );
-
-var init = function() {
-    
-    jinUtils.firebase.getMemoList(function() {
-
-    $('.repo-list-item').each(function(index) {
-
-        var hash = MD5($(this).find('form').eq(0).attr('action'));
-
-        var form = '<div id="{id}" class="github-memo-wrap">' + jinUtils.form.input + jinUtils.form.button + '</div>';
-
-        $(this).find('.github-memo-wrap').empty();
-        $(this).append(form.replace('{id}', hash).replace('{value}', jinUtils.data.list[hash] || ''));
-    });
-
-    $('.github-memo-wrap button').unbind();
-    $('.github-memo-wrap button').click(function(e) {
-
-        var $root = $(this).closest('.github-memo-wrap');
-        var hashKey = $root.attr('id');
-        var value = $root.find('input').eq(0).val();
-        jinUtils.firebase.setMemo(hashKey, value);
-    });
-
-});
 init();
-    
-};
 
 
 

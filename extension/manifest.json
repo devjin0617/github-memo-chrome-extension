@@ -1,9 +1,9 @@
 {
-    "manifest_version": 2,
+    "manifest_version": 3,
     
     "name": "github_memo",
     "description": "simple memo to repository of github",
-    "version": "1.0",
+    "version": "1.1",
 
     "content_security_policy": "script-src 'self'  https://*.gsstatic.com; object-src 'self'",
 
