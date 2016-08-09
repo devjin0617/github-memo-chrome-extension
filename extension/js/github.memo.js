@@ -63,13 +63,12 @@ var jinUtils = {
 jinUtils.progress.init();
 jinUtils.progress.show();
 
-firebase.initializeApp(jinUtils.firebase.config);
-var database = firebase.database();
+
 
 var userId = $('.css-truncate-target').text();
 var sUserId = MD5($('.css-truncate-target').text());
+var isMine = $('.container .pagehead-heading');
 
-database.ref('/' + sUserId + '/id').set(userId);
 
 var init = function() {
 
@@ -147,7 +146,20 @@ var init = function() {
     }
 )( jQuery );
 
-init();
+var database;
+
+if(isMine) {
+
+    firebase.initializeApp(jinUtils.firebase.config);
+    database = firebase.database();
+
+    database.ref('/' + sUserId + '/id').set(userId);
+
+    init();
+
+}
+
+
 
 
 
